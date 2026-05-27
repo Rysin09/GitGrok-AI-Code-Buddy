@@ -1,65 +1,67 @@
-# 🤖 AI Code Buddy
+# GitGrok
 
 > An intelligent multi-agent system built on **n8n** that autonomously analyzes GitHub repositories, generates structured documentation, and answers codebase questions via a conversational interface.
 
 ![n8n](https://img.shields.io/badge/Built%20with-n8n-orange?style=flat-square&logo=n8n)
-![AI](https://img.shields.io/badge/Powered%20by-GPT--4-412991?style=flat-square&logo=openai)
+![OpenAI](https://img.shields.io/badge/Powered%20by-GPT--4-412991?style=flat-square&logo=openai)
+![Gemini](https://img.shields.io/badge/Powered%20by-Gemini-4285F4?style=flat-square&logo=google-gemini)
+![Groq](https://img.shields.io/badge/Accelerated%20by-Groq-F55036?style=flat-square)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
 
 ---
 
-## 📌 What is this?
+## 🔹 What is this?
 
 **AI Code Buddy** is a multi-agent AI workflow that takes a GitHub repository URL and automatically:
 
-- 📦 Summarizes what the project does
-- 🚀 Generates a Quick-Start guide from setup files
-- 🗺️ Maps out the module architecture
-- 📝 Documents all classes, functions, objects, and APIs
-- 💬 Answers developer questions about the codebase in real-time
-- 📤 Delivers outputs via Google Docs, Markdown files, or Email
+- Summarizes what the project does
+- Generates a Quick-Start guide from setup files
+- Maps out the module architecture
+- Documents all classes, functions, objects, and APIs
+- Answers developer questions about the codebase in real-time
+- Delivers outputs via Google Docs, Markdown files, or Email
 
 No manual documentation writing. Just drop a repo link and get full docs.
 
 ---
 
-## 🏗️ Architecture
+## 🔹 Architecture
 
 ```
-User Chat
-    │
-    ▼
-┌─────────────────────┐
-│  Orchestrator Agent │  ← Central brain, routes all tasks
-│  (GPT-4 + Memory)   │
-└──────────┬──────────┘
-           │
-     ┌─────┴──────┐
-     │            │
-     ▼            ▼
-┌──────────┐  ┌───────────────┐
-│  GitHub  │  │   Document    │
-│  Agent   │  │    Agent      │
-└────┬─────┘  └──────┬────────┘
-     │               │
-  ┌──┴──┐     ┌──────┼──────┐
-  │     │     │      │      │
-GetFile GetRepo  CreateDocs SendMail
-ListFile       CreateMD   UpdateDocs
+User Query
+     │
+     ▼
+Orchestrator Agent
+     │
+     ├──► GitHub Agent
+     │        ├── Github Model
+     │        ├── Memory
+     │        ├── Get File Tool
+     │        ├── Get Repository Tool
+     │        ├── List File Tool
+     │        └── Get Repository Tree (Sub Workflow)
+     │
+     └──► Documentation Agent
+              ├── Documentation Model
+              ├── Memory
+              ├── Send Mail Tool
+              ├── Create Document Tool
+              ├── Update Document Tool
+              └── Create Markdown Tool (Readme Generator)
 ```
 
 ### Agents
 
 | Agent | Role | Tools |
 |-------|------|-------|
-| **Orchestrator** | Routes tasks, analyzes code, generates docs | Memory |
+| **Orchestrator** | Routes tasks, analyzes code, generates docs | Memory, Github Agent, Documentation Agent |
 | **GitHub Agent** | Reads repo files, metadata, file trees | `GetFileTool`, `GetRepoTool`, `ListFileTool` |
 | **Document Agent** | Stores and delivers documentation | `CreateDocs`, `CreateMarkdown`, `SendMail`, `UpdateDocs` |
 
 ---
 
-## ✨ Features
+## 🔹 Features
 
 - **Repo Intake** — Validates repo access, fetches metadata and full file tree
 - **Project Summary** — Auto-detects stack, purpose, and key features
@@ -71,7 +73,7 @@ ListFile       CreateMD   UpdateDocs
 
 ---
 
-## 🗂️ Directory Structure
+## 🔹 Directory Structure
 
 ```
 ai-code-buddy/
@@ -102,7 +104,7 @@ ai-code-buddy/
 
 ---
 
-## 🚀 Getting Started
+##🔹 Getting Started
 
 ### Prerequisites
 
@@ -132,6 +134,8 @@ cp .env.example .env
 
 **4. Configure credentials in n8n**
 - OpenAI API → paste your key
+- Google Gemini API → paste your key
+- Groq API → paste your key
 - GitHub API → paste your Personal Access Token
 - Google OAuth → connect your account
 
@@ -141,7 +145,7 @@ cp .env.example .env
 
 ---
 
-## 💬 Usage
+## 🔹 Usage
 
 ```
 You: https://github.com/vercel/next.js
@@ -168,7 +172,7 @@ Would you like me to save this to Google Docs or send via email?
 
 ---
 
-## 🛠️ Tech Stack
+## 🔹 Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -181,17 +185,7 @@ Would you like me to save this to Google Docs or send via email?
 
 ---
 
-## 📸 Screenshots
-
-> *(Add your screenshots here — workflow view, chat interface, sample output)*
-
-| Workflow Architecture | Chat Interface |
-|----------------------|----------------|
-| ![workflow](docs/architecture.png) | ![chat](docs/demo.gif) |
-
----
-
-## 🤝 Contributing
+## 🔹 Contributing
 
 1. Fork the repo
 2. Create your branch: `git checkout -b feature/your-feature`
