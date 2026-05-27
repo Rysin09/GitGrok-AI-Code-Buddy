@@ -229,8 +229,9 @@ MIT License — feel free to use, modify, and distribute.
 
 ## 👤 Author
 
-**Aryan** — [@your-github](https://github.com/your-username)
+**Aryan** — [@Rysin09-github](https://github.com/rysin09)
 
+*B.Tech. Computer Science & Engineering, BBDITM*
 *B.Sc. (Hons) Computer Science & Data Analytics, IIT Patna*
 
 > ⭐ If this project helped you, consider giving it a star!
