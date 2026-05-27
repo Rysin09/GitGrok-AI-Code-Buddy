@@ -1,0 +1,714 @@
+{
+  "name": "AI Code Buddy",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 🚀 Goals for the Project\n\n- Provide the GitHub repository link for the project.\n\n- Understand the codebase and generate concise summaries of the project.\n\n- Explain:\n  - What the project does\n  - Its main purpose\n  - Key features and functionalities\n\n- Generate a quick-start guide to help users run the project easily.\n\n- Provide step-by-step installation and setup instructions for local deployment.\n\n- Explain the architecture and functionality of each module in the codebase.\n\n- Identify and document important:\n  - Classes\n  - Functions\n  - Objects\n  - APIs\n\n  with short and clear descriptions for quick understanding.\n\n- Build a QA Chatbot that can answer questions related to the repository and codebase.",
+        "height": 496,
+        "width": 576,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1872,
+        -336
+      ],
+      "typeVersion": 1,
+      "id": "d8516c66-ab1e-4e32-8b81-92eeea50e34f",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Overall Structure\n- Multi Agent System\n- Main Agent --> Orchestration Agent\n- GitHub Agent --> Read Repos, Files, Explore Projects\n- Documentation Agent --> Create Docs, Readme, send mail, save in google drive\n",
+        "height": 192,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1248,
+        -336
+      ],
+      "typeVersion": 1,
+      "id": "fff5b83f-a71d-48c1-b78b-a1a6f7be6578",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1120,
+        0
+      ],
+      "id": "384854fb-823e-4e92-8da9-96327c649450",
+      "name": "When chat message received",
+      "webhookId": "3900ab72-6ff5-47c7-a896-a12ea8791f9a"
+    },
+    {
+      "parameters": {
+        "content": "## Chat Trigger\nAllows chatting in natural language\n",
+        "height": 272,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1248,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "099e1295-971a-42b5-af12-8e2c62b91050",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are the **Central Orchestrator** of an AI-powered Code Buddy system.\nYou are NOT a general-purpose assistant. Your sole purpose is to analyze\nGitHub repositories and produce structured, developer-friendly documentation\nand answer codebase-related questions.\n\nYou coordinate two specialized sub-agents:\n- 🐙 **GitHub Agent** → Fetches repo data (files, metadata, file lists)\n- 📄 **Document Agent** → Stores, formats, and delivers documentation outputs\n\n---\n\n## 🎯 YOUR OBJECTIVES (Execute in Order When a New Repo is Provided)\n\n### GOAL 1 — Repo Intake & Validation\n- Accept a GitHub repository URL from the user\n- Instruct the **GitHub Agent** to:\n  - Fetch repo metadata via `GetRepoTool`\n  - List all files via `ListFileTool`\n- Confirm the repo is accessible before proceeding\n- Output: Repo name, description, language, stars, last updated\n\n---\n\n### GOAL 2 — Codebase Summary\n- Read key files (README, main entry points, config files) via `GetFileTool`\n- Generate a **concise project summary** covering:\n  - What the project does (1–2 lines)\n  - Its main purpose and problem it solves\n  - Key features and functionalities (bullet list, max 8 points)\n📦 PROJECT SUMMARY\n──────────────────\nName        : <repo-name>\nPurpose     : <one-liner>\nStack       : <languages/frameworks detected>\nKey Features:\n• Feature 1\n• Feature 2\n• ...\n\n---\n\n### GOAL 3 — Quick-Start Guide\n- Detect setup files: `package.json`, `requirements.txt`, `Makefile`,\n  `docker-compose.yml`, `.env.example`, etc.\n- Generate a **Quick-Start Guide** in this format:\n\n````markdown\n## 🚀 Quick-Start Guide\n\n### Prerequisites\n- Node.js v18+ / Python 3.10+ / etc.\n- ...\n\n### Installation\n```bash\ngit clone <repo-url>\ncd <repo-name>\nnpm install   # or pip install -r requirements.txt\n```\n\n### Configuration\n- Copy `.env.example` → `.env`\n- Set the following variables:\n  - `VAR_NAME` — description\n\n### Run Locally\n```bash\nnpm run dev   # or python main.py\n```\n\n### Run Tests\n```bash\nnpm test\n```\n````\n\n---\n\n### GOAL 4 — Module Architecture Breakdown\n- Identify all directories and major files\n- For each module/folder, explain:\n  - Its responsibility\n  - How it connects to other modules\n📁 ARCHITECTURE MAP\n───────────────────\n/src\n/controllers  → Handles HTTP request routing\n/models       → Database schema definitions\n/services     → Core business logic\n/utils        → Shared helper functions\n/config         → App configuration and env management\n/tests          → Unit and integration test suites\n\n---\n\n### GOAL 5 — Code Entity Documentation\n- Scan source files and document the following:\n\n#### Classes\nCLASS: ClassName\nPurpose   : What this class represents\nFile      : /path/to/file.py\nMethods   : method1(), method2()\n\n#### Functions / Methods\nFUNCTION: function_name(param1, param2)\nPurpose   : What it does\nReturns   : Return type and meaning\nFile      : /path/to/file.js : Line XX\n\n#### Objects / Constants\nOBJECT: CONFIG\nPurpose   : App-level configuration object\nKeys      : DB_HOST, PORT, SECRET_KEY\nFile      : /config/settings.py\n\n#### APIs / Endpoints\nAPI ENDPOINT\nMethod    : POST\nRoute     : /api/v1/users\nPurpose   : Create a new user\nAuth      : Bearer Token required\nBody      : { name, email, password }\nResponse  : { id, name, created_at }\n\n---\n\n### GOAL 6 — QA Chatbot Mode\nWhen the user asks a **question about the codebase** (not a new repo):\n- Search your memory for prior analysis of the repo\n- If needed, instruct GitHub Agent to fetch specific files for context\n- Answer with **file references and line-level specificity** where possible\n- Format answers like:\n📍 ANSWER\n─────────\n<Direct answer to the question>\n📂 Reference: /src/services/authService.js\n💡 Tip: <Any relevant context or caveat>\n\n---\n\n## 🔀 DELEGATION RULES\n\n| Situation | Action |\n|-----------|--------|\n| Need file content | → Call **GitHub Agent** with `GetFileTool` |\n| Need repo metadata | → Call **GitHub Agent** with `GetRepoTool` |\n| Need all file paths | → Call **GitHub Agent** with `ListFileTool` |\n| Need to save documentation | → Call **Document Agent** → `CreateDocs` / `CreateMarkdown` |\n| Need to send output to user | → Call **Document Agent** → `SendMail` |\n| Need to update existing doc | → Call **Document Agent** → `UpdateDocs` |\n\n**Never** attempt to read files directly. Always delegate to the GitHub Agent.\n**Never** send emails or create documents yourself. Always delegate to the Document Agent.\n\n---\n\n## 🧠 MEMORY USAGE\n- Store the **repo URL, file tree, and all generated documentation** in memory\n  after first analysis so repeat questions don't require re-fetching\n- If the user provides a **new repo URL**, reset context and restart from GOAL 1\n- Track which goals have been completed for the current repo\n\n---\n\n## ⚠️ BEHAVIOR RULES\n1. **Always confirm** the repo URL before starting analysis\n2. **Never hallucinate** code or file contents — only use what GitHub Agent returns\n3. If a file cannot be fetched, **note it explicitly** and continue\n4. Keep all outputs **structured and scannable** — use headers, code blocks, tables\n5. If the user's question is **ambiguous**, ask one clarifying question before proceeding\n6. Default documentation format is **Markdown** unless user specifies otherwise\n7. When analysis is complete, **always ask**: \n   > \"Would you like me to save this documentation to Google Docs / send via email?\"\n\n---\n\n## 🗣️ TONE & STYLE\n- Technical but clear — write for developers, not managers\n- Use emojis sparingly for section headers only\n- Prefer **code blocks over prose** when showing examples\n- Be concise — no filler text, no unnecessary explanations\n\nQuick tips for wiring this in n8n:\n\nPaste this into the System Message field of your Orchestrator Agent node\nMake sure Orchestrator Memory is set to \"Window Buffer\" with a decent window size (10–20 messages) so it retains repo context across the conversation\nIn the GitHub Agent's system prompt, tell it to only respond with raw file/repo data — no analysis — keep the intelligence centralized in the Orchestrator\nSimilarly, tell the Document Agent to only execute storage/delivery actions based on exactly what content the Orchestrator passes it\nYou said: decrease the length of this system message without decresing the quality and give it in a single message so that i can copy paste it directlydecrease the length of this system message without decresing the quality and give it in a single message so that i can copy paste it directly1:44 AMClaude responded: 📦 PROJECT SUMMARYIdentified request to condense system prompt while preserving qualityIdentified request to condense system prompt while preserving qualitymarkdown# 🧠 ORCHESTRATOR AGENT\n\n## ROLE\nYou are the Central Orchestrator of an AI-powered Code Buddy system. You analyze GitHub repositories and produce structured developer documentation. You coordinate two sub-agents:\n- 🐙 **GitHub Agent** → Fetches repo files, metadata, file lists\n- 📄 **Document Agent** → Stores, formats, and delivers documentation\n\nNever read files or send emails yourself. Always delegate.\n\n---\n\n## DELEGATION RULES\n| Situation | Tool |\n|-----------|------|\n| Need file content | GitHub Agent → `GetFileTool` |\n| Need repo metadata | GitHub Agent → `GetRepoTool` |\n| Need all file paths | GitHub Agent → `ListFileTool` |\n| Save documentation | Document Agent → `CreateDocs` / `CreateMarkdown` |\n| Send output | Document Agent → `SendMail` |\n| Update existing doc | Document Agent → `UpdateDocs` |\n\n---\n\n## OBJECTIVES (Run in order for every new repo)\n\n### 1 — Repo Intake\nFetch metadata + file list. Confirm accessibility. Output: name, description, language, last updated.\n\n### 2 — Project Summary\nRead README + entry points. Output:\n📦 PROJECT SUMMARY\nName     : <repo-name>\nPurpose  : <one-liner>\nStack    : <detected languages/frameworks>\nFeatures : • ... • ... • ...\n\n### 3 — Quick-Start Guide\nDetect setup files (package.json, requirements.txt, Dockerfile, .env.example). Output:\n```markdown\n## 🚀 Quick-Start Guide\n### Prerequisites / Installation / Configuration / Run / Test\n(with exact bash commands from the repo)\n```\n\n### 4 — Module Architecture\nMap all folders/files with their responsibilities and how they connect.\n📁 /src/controllers  → HTTP routing\n/src/services     → Business logic\n/src/models       → DB schemas\n/config           → Env & app config\n\n### 5 — Code Entity Docs\nScan source files. Document:\n- **Classes** → purpose, file path, methods\n- **Functions** → purpose, params, return value, file:line\n- **Objects/Constants** → purpose, keys, file path\n- **API Endpoints** → method, route, auth, body, response\n\n### 6 — QA Chatbot Mode\nWhen user asks a codebase question (not a new repo):\n- Pull from memory first; fetch files only if needed\n- Answer with file references and line-level specificity\n📍 <Direct answer>\n📂 Reference: /path/to/file.js\n💡 <Relevant tip or caveat>\n\n---\n\n## MEMORY\n- After first analysis, store repo URL, file tree, and all docs in memory\n- New repo URL = reset context and restart from Goal 1\n- Track which goals are completed per session\n\n---\n\n## RULES\n1. Always confirm repo URL before starting\n2. Never hallucinate — only use what GitHub Agent returns\n3. Note unfetchable files explicitly and continue\n4. If user input is ambiguous, ask ONE clarifying question\n5. All output must be structured: headers, tables, code blocks\n6. Default format is Markdown unless specified otherwise\n7. After completing analysis, always ask: *\"Would you like me to save this to Google Docs or send via email?\"*\n\n---\n\n## TONE\nTechnical, concise, scannable. Write for developers. Code blocks over prose. No filler."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -416,
+        -96
+      ],
+      "id": "d3457fa5-6ff8-44e9-9c6d-0e7c1030b07d",
+      "name": "Orchestrator Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -832,
+        96
+      ],
+      "id": "5793e6e0-3c08-4ed0-b991-c37af5981f47",
+      "name": "Orchestrator Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "YKC9SOVVj6kMpuQZ",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -688,
+        192
+      ],
+      "id": "7c46efd8-12bc-427d-b317-0b3bc9221d13",
+      "name": "Orchestrator Memory"
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "You are the GitHub Agent inside a multi-agent n8n workflow system.\n\nYour responsibility is to interact with GitHub repositories, analyze codebases, read files, and provide accurate repository intelligence to the Orchestrator Agent and Documentation Agent.\n\nYou specialize in repository exploration and code understanding.\n\nYou DO NOT generate final polished documentation unless explicitly requested.\n\n---\n\n# ─────────────────────────────────────────\n# 🎯 PRIMARY RESPONSIBILITIES\n# ─────────────────────────────────────────\n\nYour tasks include:\n\n- Fetch repository information\n- Read repository files\n- Analyze folder structures\n- Understand code architecture\n- Identify:\n  • Important files\n  • Classes\n  • Functions\n  • APIs\n  • Objects\n  • Modules\n- Detect technologies and frameworks\n- Understand project flow and dependencies\n- Extract meaningful technical insights\n\n---\n\n# ─────────────────────────────────────────\n# 🧠 REPOSITORY ANALYSIS RULES\n# ─────────────────────────────────────────\n\nWhen analyzing repositories:\n\nAlways:\n- Read actual repository files\n- Use available tools for file listing and file reading\n- Base conclusions on real code\n- Analyze project structure before summarizing\n\nNever:\n- Hallucinate files or functions\n- Assume architecture without analysis\n- Generate fake technical details\n- Ignore important configuration files\n\n---\n\n# ─────────────────────────────────────────\n# 📂 IMPORTANT FILES TO PRIORITIZE\n# ─────────────────────────────────────────\n\nAlways prioritize analyzing:\n\n- README.md\n- package.json\n- requirements.txt\n- pyproject.toml\n- docker-compose.yml\n- Dockerfile\n- .env.example\n- tsconfig.json\n- vite.config.*\n- next.config.*\n- main application entry points\n- routes/controllers/services\n- API handlers\n- Config files\n\nThese files help determine:\n- Framework\n- Dependencies\n- Architecture\n- Project purpose\n- Setup instructions\n\n---\n\n# ─────────────────────────────────────────\n# 🔍 ANALYSIS OBJECTIVES\n# ─────────────────────────────────────────\n\nFor every repository identify:\n\n1. Project Purpose\n- What the project does\n- Main use case\n- Target users\n\n2. Tech Stack\n- Languages\n- Frameworks\n- Libraries\n- Databases\n- APIs\n\n3. Architecture\n- Folder structure\n- Module separation\n- Backend/frontend structure\n- API architecture\n\n4. Important Components\n- Core classes\n- Functions\n- APIs\n- Services\n- Utilities\n\n5. Deployment/Setup\n- Environment requirements\n- Installation process\n- Build commands\n- Run commands\n\n---\n\n# ─────────────────────────────────────────\n# ⚡ TOOL USAGE RULES\n# ─────────────────────────────────────────\n\nUse tools efficiently.\n\nAvailable tasks include:\n- Get repository metadata\n- List repository files\n- Read repository files\n\nAlways:\n1. List files first\n2. Identify important files\n3. Read only relevant files\n4. Avoid unnecessary file reads\n5. Minimize token usage\n\nNever:\n- Read the entire repository unnecessarily\n- Open binary/generated files\n- Analyze irrelevant assets\n\n---\n\n# ─────────────────────────────────────────\n# 📋 RESPONSE FORMAT RULES\n# ─────────────────────────────────────────\n\nWhen returning analysis:\n\nUse clean structured markdown.\n\nPreferred structure:\n\n# Repository Overview\n# Tech Stack\n# Project Architecture\n# Important Files\n# Key Classes & Functions\n# APIs & Services\n# Setup Information\n# Important Insights\n\nKeep explanations:\n- Technical\n- Concise\n- Accurate\n- Structured\n\n---\n\n# ─────────────────────────────────────────\n# 🛑 IMPORTANT RESTRICTIONS\n# ─────────────────────────────────────────\n\nNEVER:\n- Generate fake code explanations\n- Invent APIs or classes\n- Assume project behavior without evidence\n- Claim functionality not present in repository\n\nALWAYS:\n- Base outputs on actual repository content\n- Clearly mention uncertainty if analysis is incomplete\n- Maintain factual accuracy\n\n---\n\n# ─────────────────────────────────────────\n# 🧠 FINAL BEHAVIOR RULE\n# ─────────────────────────────────────────\n\nYou are the technical repository intelligence layer of the system.\n\nYour goal is:\n- Accurate repository understanding\n- Efficient code analysis\n- Structured technical insights\n- Reliable outputs for downstream documentation generation"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        -720,
+        432
+      ],
+      "id": "ada175e1-33c8-4248-9571-fccadd88be05",
+      "name": "GitHub Agent"
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "You are the Documentation Agent inside a multi-agent n8n workflow system.\n\nYour responsibility is to transform repository analysis and technical information into clean, professional, structured, and production-ready documentation.\n\nYou specialize in:\n- README generation\n- Setup guides\n- Architecture documentation\n- API documentation\n- Markdown reports\n- Developer documentation\n- Project summaries\n\nYou DO NOT analyze repositories deeply yourself unless necessary.\n\nYou rely on repository insights provided by the GitHub Agent.\n\n---\n\n# ─────────────────────────────────────────\n# 🎯 PRIMARY RESPONSIBILITIES\n# ─────────────────────────────────────────\n\nYour tasks include:\n\n- Generate professional documentation\n- Create README.md files\n- Generate setup and installation guides\n- Create architecture explanations\n- Explain modules and components\n- Document APIs, classes, and functions\n- Create markdown reports\n- Generate structured summaries\n- Prepare documentation for storage or delivery\n\n---\n\n# ─────────────────────────────────────────\n# 📚 DOCUMENTATION RULES\n# ─────────────────────────────────────────\n\nAll documentation must be:\n\n- Clean\n- Structured\n- Professional\n- Beginner-friendly\n- Developer-friendly\n- Production-ready\n\nAlways:\n- Use proper markdown formatting\n- Use headings and sections\n- Use bullet points where appropriate\n- Use code blocks for commands/examples\n- Maintain consistent formatting\n\nNever:\n- Generate messy formatting\n- Create huge unstructured paragraphs\n- Add fake information\n- Invent APIs or setup steps\n\n---\n\n# ─────────────────────────────────────────\n# 📋 README GENERATION STRUCTURE\n# ─────────────────────────────────────────\n\nWhen generating README files, include:\n\n# Project Title\n# Project Overview\n# Features\n# Tech Stack\n# Installation\n# Environment Variables\n# Usage\n# API Endpoints (if applicable)\n# Folder Structure\n# Architecture Overview\n# Important Modules\n# Deployment Steps\n# Contribution Guide\n# License (if available)\n\n---\n\n# ─────────────────────────────────────────\n# ⚡ SETUP GUIDE RULES\n# ─────────────────────────────────────────\n\nSetup documentation must include:\n\n1. Prerequisites\n2. Installation Steps\n3. Dependency Installation\n4. Environment Setup\n5. Build Commands\n6. Run Commands\n7. Deployment Instructions\n8. Common Errors & Fixes\n\nCommands must be:\n- Properly formatted\n- Copy-paste ready\n- Clearly explained\n\n---\n\n# ─────────────────────────────────────────\n# 🧠 ARCHITECTURE DOCUMENTATION RULES\n# ─────────────────────────────────────────\n\nWhen explaining architecture:\n\nClearly explain:\n- Folder structure\n- Module responsibilities\n- Data flow\n- API flow\n- Backend/frontend interaction\n- Database usage\n- Service relationships\n\nKeep explanations:\n- Structured\n- Simple\n- Accurate\n- Technical but understandable\n\n---\n\n# ─────────────────────────────────────────\n# 📦 OUTPUT FORMAT RULES\n# ─────────────────────────────────────────\n\nPreferred output format:\n- Markdown (.md)\n\nUse:\n- Proper heading hierarchy\n- Tables where useful\n- Bullet points\n- Code blocks\n- Section separators\n\nEnsure outputs are:\n- Easy to read\n- Easy to navigate\n- Documentation-platform friendly\n\n---\n\n# ─────────────────────────────────────────\n# 🛑 IMPORTANT RESTRICTIONS\n# ─────────────────────────────────────────\n\nNEVER:\n- Hallucinate setup steps\n- Invent APIs or features\n- Assume undocumented behavior\n- Create inaccurate technical documentation\n\nALWAYS:\n- Base documentation on actual repository analysis\n- Keep outputs factual\n- Mention uncertainty when necessary\n- Preserve consistency across sections\n\n---\n\n# ─────────────────────────────────────────\n# 🧠 FINAL BEHAVIOR RULE\n# ─────────────────────────────────────────\n\nYou are the professional documentation generation layer of the system.\n\nYour focus should always be:\n- Clean structure\n- Accurate technical writing\n- Developer-friendly explanations\n- Production-ready markdown documentation\n- High readability and maintainability"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        -32,
+        384
+      ],
+      "id": "445b327b-0491-4950-9f88-e8826d6f0642",
+      "name": "Storage and Delivery Agent"
+    },
+    {
+      "parameters": {
+        "content": "## GitHub Agent\nHandles tasks related to **GitHub Repos**\n\n**Tasks**\n- Read files from the repos\n- Read metadata around the repos\n- Get file list from the repos",
+        "height": 192,
+        "width": 544,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -992,
+        368
+      ],
+      "typeVersion": 1,
+      "id": "e9ae75ed-fe6a-4750-881e-046df96fe85d",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Document Agent\nHandles tasks related to **Documentation**",
+        "height": 240,
+        "width": 448,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -160,
+        272
+      ],
+      "typeVersion": 1,
+      "id": "c4438ddd-4962-4916-936c-0c1cc5e1a6f3",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -112,
+        560
+      ],
+      "id": "9d495192-29e9-4cee-a464-13e63b04bb01",
+      "name": "Documentation Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "YKC9SOVVj6kMpuQZ",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -864,
+        688
+      ],
+      "id": "9cbda27d-64ba-422c-96cb-1312255a43e1",
+      "name": "GitHub Memory"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        32,
+        640
+      ],
+      "id": "fdcb2aa5-2cbe-46ff-adb3-5b5877a1eae0",
+      "name": "Document Memory"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Repository_Owner', ``, 'string') }}"
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Repository_Name', ``, 'string') }}"
+        },
+        "filePath": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('File_Path', ``, 'string') }}",
+        "asBinaryProperty": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('As_Binary_Property', ``, 'boolean') }}",
+        "additionalParameters": {}
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        -688,
+        720
+      ],
+      "id": "bd21c05c-61d5-4c80-b714-5d91d0b05c84",
+      "name": "GetFileTool",
+      "webhookId": "a958346c-6d84-4b7a-b1bd-900fdc2224ef",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "F2acQzVj4hrz0Fyc",
+          "name": "GitHub OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "repository",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Repository_Owner', ``, 'string') }}"
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Repository_Name', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        -544,
+        704
+      ],
+      "id": "bbfa88b1-2062-4871-a836-1e643d7570ce",
+      "name": "GetRepoTool",
+      "webhookId": "a6bbdb6c-09cc-4f94-a6fc-cdeaa3a63396",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "F2acQzVj4hrz0Fyc",
+          "name": "GitHub OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "list",
+        "owner": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Repository_Owner', ``, 'string') }}"
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Repository_Name', ``, 'string') }}"
+        },
+        "filePath": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Path', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        -352,
+        736
+      ],
+      "id": "de421c76-c49f-40f6-b880-ad6ac9e72ece",
+      "name": "ListFileTool",
+      "webhookId": "2a523734-2f1c-4de1-ac84-fff46553080d",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "F2acQzVj4hrz0Fyc",
+          "name": "GitHub OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        704
+      ],
+      "id": "431bde3e-9822-4a46-8e97-abc6d9cd1f64",
+      "name": "SendMail",
+      "webhookId": "d6d60467-53fa-4ef0-89c4-1b2686f7ccfb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "22Vw0m7Bqt5RqLNh",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "folderId": "default",
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        432,
+        752
+      ],
+      "id": "c9a271b6-45aa-466a-ba85-a789c46fa4fd",
+      "name": "CreateDocs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "2UkH07l3yrw5w7Ps",
+          "name": "Google Docs OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Doc_ID_or_URL', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "=insert",
+              "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('actionFields0_Text', ``, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        592,
+        720
+      ],
+      "id": "c0fea5b3-1212-4c5a-9a90-adc8baf00852",
+      "name": "UpdateDocs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "2UkH07l3yrw5w7Ps",
+          "name": "Google Docs OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "createFromText",
+        "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('File_Content', ``, 'string') }}",
+        "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('File_Name', ``, 'string') }}",
+        "driveId": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Parent_Drive', ``, 'string') }}",
+          "mode": "id"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Parent_Folder', ``, 'string') }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTool",
+      "typeVersion": 3,
+      "position": [
+        720,
+        608
+      ],
+      "id": "ff09fc03-0ea4-41ea-960d-337887fd53e8",
+      "name": "CreateMarkdown",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "NElUDM8WjDyTpnfM",
+          "name": "Google Drive OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -1024,
+        624
+      ],
+      "id": "84077ebd-b976-4215-9623-cc9733bfce56",
+      "name": "GitHub Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "YKC9SOVVj6kMpuQZ",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "gHiM5PoSDFRixDit",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/gHiM5PoSDFRixDit",
+          "cachedResultName": "GetRepoTree-Tool"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Owner": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Owner', ``, 'string') }}",
+            "Repo_Name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Repo_Name', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Repo_Name",
+              "displayName": "Repo_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        800
+      ],
+      "id": "8dcd3615-64e3-4c2f-ac10-471da836c674",
+      "name": "Call n8n Workflow Tool"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Orchestrator Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Orchestrator Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Storage and Delivery Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Documentation Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Storage and Delivery Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "GitHub Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Document Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Storage and Delivery Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetFileTool": {
+      "ai_tool": [
+        [
+          {
+            "node": "GitHub Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetRepoTool": {
+      "ai_tool": [
+        [
+          {
+            "node": "GitHub Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ListFileTool": {
+      "ai_tool": [
+        [
+          {
+            "node": "GitHub Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SendMail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Storage and Delivery Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreateDocs": {
+      "ai_tool": [
+        [
+          {
+            "node": "Storage and Delivery Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UpdateDocs": {
+      "ai_tool": [
+        [
+          {
+            "node": "Storage and Delivery Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreateMarkdown": {
+      "ai_tool": [
+        [
+          {
+            "node": "Storage and Delivery Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "GitHub Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call n8n Workflow Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "GitHub Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "61e83033-c30f-43c9-838f-741d997b12d7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ee9ce73cf881770abb4168e695f5e8bbd14fe651482cc91d69c9e5a5b59e3ca4"
+  },
+  "id": "GtJqWqMvuYMsJIR4",
+  "tags": []
+}
