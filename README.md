@@ -195,7 +195,7 @@ Would you like me to save this to Google Docs or send via email?
 
 ---
 
-# 📈 Future Improvements
+## 🔹 Future Improvements
 
 - Vector database integration
 - Semantic repository search
